@@ -23,3 +23,7 @@ Archivos 10 (con datos sólo de la provincia de Granada), pasados a CSV
 ##10PartidoMunicipio
 
 Archivos 10 (con datos sólo de la provincia de Granada), pasados a CSV, con el nombre del municipio y las siglas del partido en lugar de los códigos correspondientes.
+
+##10Colegio.
+
+Archivos 10 (con datos sólo de Granada capital), pasados a CSV, con el nombre del municipio, el nombre del colegio y las siglas del partido en lugar de los códigos correspondientes.
