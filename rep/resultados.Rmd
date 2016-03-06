@@ -11,6 +11,8 @@ library("ggplot2")
 library("ineq")
 resultados <- read.csv("../csv/resultados_elecciones_todas.csv")
 resultados.x.eleccion <- data.frame(eleccion = paste0(resultados$Año,resultados$Mes),Partido=resultados$Partido,Votos=as.numeric(as.character(resultados$Votos)))
+gini <- aggregate(resultados.x.eleccion$Votos,list(resultados.x.eleccion$eleccion),ineq)
+gini.x.eleccion <- data.frame(eleccion=gini$Group.1,gini=gini$x)
 ```
 
 #Introducción
