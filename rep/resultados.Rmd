@@ -24,6 +24,10 @@ entropy <- entropy[1:(nrow(entropy)-1),]
 entropy.x.eleccion <- data.frame(Fecha=paste(entropy$Año,entropy$Mes,sep="/"),Tipo=entropy$Tipo,entropy=entropy$RESULT)
 ```
 
+##Resumen
+
+La distribución de votos entre partidos cambia de elección a elección, pero a priori, a pesar de interpretaciones como el "tsunami bipartidista" y "las mareas del cambio", es difícil saber qué tendencia sigue y cómo y con qué frecuencia se producen estos cambios. Para averiguarlo y a partir de los datos de las elecciones españolas de ámbito nacional desde 1977, hemos medido una serie de índices de desigualdad y analizado qué cambios y tendencias aparecen. 
+
 #Introducción
   
 En un sistema multipartidista, los resultados de las elecciones varían de una a otra, creándose mayorías y disolviéndose; los partidos se consolidan, se alían, y finalmente desaparecen. En este trabajo nos planteamos analizar los rsultados de las elecciones españolas desde el principio, usando los datos publicados en la página [Infoelectoral](http://infoelectoral.mir.es) y publicados en @Merelo2016. La página contienen los resultados globales y por circunscripciones de cada proceso electoral en España a nivel nacional: elecciones naconales, municipales, y europeas.
