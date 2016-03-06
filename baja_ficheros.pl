@@ -7,7 +7,7 @@ use File::Slurp::Tiny qw(read_file);
 use LWP::Simple qw(getstore);
 use v5.14;
 
-my @codigos= ( Congreso => "02",
+my %codigos= ( Congreso => "02",
 	       Senado => "03",
 	       Municipales => "04",
 	       Cabildos => "06",

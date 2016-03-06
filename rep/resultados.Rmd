@@ -10,7 +10,7 @@ bibliography: elecciones.bib
 library("ggplot2")
 library("ineq")
 resultados <- read.csv("../csv/resultados_elecciones_todas.csv")
-resultados.x.eleccion <- data.frame(eleccion = paste0(resultados$Año,resultados$Mes),Partido=resultados$Partido,Votos=as.numeric(as.character(resultados$Votos)))
+resultados.x.eleccion <- data.frame(eleccion = paste0(resultados$Año,resultados$Mes,resultados$Tipo),Partido=resultados$Partido,Tipo=resultados$Tipo,Votos=as.numeric(as.character(resultados$Votos)))
 gini <- aggregate(resultados.x.eleccion$Votos,list(resultados.x.eleccion$eleccion),Gini)
 gini.x.eleccion <- data.frame(eleccion=gini$Group.1,gini=gini$x)
 entropy <- aggregate(resultados.x.eleccion$Votos,list(resultados.x.eleccion$eleccion),entropy)
@@ -22,7 +22,7 @@ entropy.x.eleccion <- data.frame(eleccion=entropy$Group.1,entropy=entropy$x)
 En un sistema multipartidista, los resultados de las elecciones varían de una a otra, creándose mayorías y disolviéndose; los partidos se consolidan, se alían, y finalmente desaparecen. En este trabajo nos planteamos analizar los rsultados de las elecciones españolas desde el principio, usando los datos publicados en la página [Infoelectoral](http://infoelectoral.mir.es) y publicados en @Merelo2016. La página contienen los resultados globales y por circunscripciones de cada proceso electoral en España a nivel nacional: elecciones naconales, municipales, y europeas.
   
 ```{r, echo=FALSE, message=FALSE,results='hide',warning=FALSE}
-ggplot(resultados.x.eleccion,aes(x=eleccion,y=Votos))+geom_point(stat='identity')+stat_summary(fun.y = "median", geom="point", colour = "red", size = 4, shape=15)+scale_y_log10()+ theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(resultados.x.eleccion,aes(x=eleccion,y=Votos,color=Tipo))+geom_point(stat='identity')+stat_summary(fun.y = "median", geom="point", colour = "red", size = 4, shape=15)+scale_y_log10()+ theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
 # References
