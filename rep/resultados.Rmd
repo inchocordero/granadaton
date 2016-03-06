@@ -28,18 +28,39 @@ entropy.x.eleccion <- data.frame(Fecha=paste(entropy$Año,entropy$Mes,sep="/"),T
   
 En un sistema multipartidista, los resultados de las elecciones varían de una a otra, creándose mayorías y disolviéndose; los partidos se consolidan, se alían, y finalmente desaparecen. En este trabajo nos planteamos analizar los rsultados de las elecciones españolas desde el principio, usando los datos publicados en la página [Infoelectoral](http://infoelectoral.mir.es) y publicados en @Merelo2016. La página contienen los resultados globales y por circunscripciones de cada proceso electoral en España a nivel nacional: elecciones naconales, municipales, y europeas.
 
-El electorado cambia de elección a elección, y la concentración o dispersión de votos entre los diferentes partidos, así como el número de partidos, puede 
+El electorado cambia de elección a elección, y la concentración o dispersión de votos entre los diferentes partidos, así como el número de partidos, puede tener una cierta tendencia que variará con el tipo de elección y también con los años. En este informe nos proponemos trabajar sobre elecciones nacionales en España desde 1977, midiendo varios índices de desigualdad. Los índices de desigualdad medirán cómo se distribuyen los votos entre partidos de la misma forma que se mide la desigualdad de ingresos. Una desigualdad alta indicará que los partidos que reciben más votos reciben una cantidad muy superior a la de los partidos que menos reciben; por otro lado, baja desigualdad indicará qeu todos los partidos reciben una cantidad de votos más o menos equivalente. A priori, cabría esperar una desigualdad alta, teniendo en cuenta que hay partidos que reciben millones mientras que otros reciben sólo unos miles o ninguno. Sin embargo, esto puede variar con el tiempo y es interesante ver las tendencias que hay.
+
+Examinemos primero los datos completos en la siguiente gráfica
   
 ```{r, echo=FALSE, message=FALSE,results='hide',warning=FALSE}
 ggplot(resultados.x.eleccion,aes(x=eleccion,y=Votos,color=Tipo))+geom_point(stat='identity')+stat_summary(fun.y = "median", geom="point", colour = "red", size = 4, shape=15)+scale_y_log10()+ theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
+En este caso se trazan el abscisas los procesos electorales y en ordenadas el número de votos en escala logarítmica. Los colores indican diferentes tipos de procesos: Congreso de los Diputados, Elecciones Municipales y el Parlamento Europeo, este último con circunscripción única. Esta gráfica permite observar el rango de variación de los votos recibidos y también, en un punto rojo, la mediana de votos para todas las formaciones. Esta mediana oscila entre algo más de 1000 y menos de 10000 votos, indicando que la mitad de los partidos reciben menos que ese número de votos en cada elección. Sin embargo, varía con el tiempo, oscilando cada elección.
+
+#Desigualdad y sorpresa en las elecciones
+
+El [coeficiente de Gini](https://es.wikipedia.org/wiki/Coeficiente_de_Gini) mide la desigualdad en los ingresos, aunque en este caso *ingresos* equivaldría a *votos recibidos*. Se muestra a continuación con el mismo código de color que en el anterior y un tamaño del punto equivalente al número total de partidos en cada proceso, que oscila entre unos 160 (en elecciones municipales, generalmente) y alrededor de 40 en las elecciones europeas.
 ```{r, echo=FALSE, message=FALSE,results='hide',warning=FALSE}
 ggplot(gini.x.eleccion,aes(x=Fecha,y=gini,color=Tipo,size=partidos/10))+geom_point(stat='identity')+theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
+La gráfica anterior permite apreciar a la vez el rango del coeficiente, desde un poco menos de 0.25 para las europeas de 2004 hasta un poco más de 0.40 para las elecciones al congreso de 1993, las diferencias entre procesos, con las elecciones generales siendo las menos igualitarias, con más de 0.30 siempre, y las europeas bajando hasta 0.24, y las municipales manteniendo unos valores más constantes aldededor de 130. Sin embargo, se aprecian procesos de desigualdad creciente que culminaron en 1993, descendiendo hasta una igualdad máxima en 2004, para dispararse otra vez hasta las penúltimas elecciones (antes del 20D).
+
+El [índice de Theil](https://es.wikipedia.org/wiki/%C3%8Dndice_de_Theil), trazado abajo, está basado en un concepto similar, pero está relacionado con cómo es descriptivo cada grupo (en este caso cada partido) del número de votos que recibe. Una vez más, la distribución será peor cuanto más se acerque a uno.
 
 ```{r, echo=FALSE, message=FALSE,results='hide',warning=FALSE}
 ggplot(entropy.x.eleccion,aes(x=Fecha,y=entropy,color=Tipo))+geom_point(stat='identity')+theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
+
+Los valores son similares al coeficiente de Gini, sin embargo las diferencias relativas tienen otra magnitud. Sin embargo, si nos fijamos en cada proceso por separado, vemos que los cambios son de la misma forma: aumento de la desigualdad hasta 1993, disminución hasta 2004, y aumento de nuevo hasta la época actual, al menos antes de las elecciones de diciembre de 2015, que todavía no están en la misma página.
+
+#Conclusiones
+
+La desigualdad en procesos electorales parece seguir algún tipo de lógica cuya interpretación real tendrá que dejarse a los politólogos. Puede ser que haya una especie de ciclo de unos 10 años, puede ser simplemente que se corresponda a unos factores externos; sí parece que la desigualdad aumenta y disminuye en todos los procesos electorales, incluso aunque la distribución de votos se haga de forma más igualitaria en las elecciones europeas y municipales que en las elecciones al congreso.
+
+Sería interesante ver también esa distribución por provincias y incluir también procesos electorales autonómicos y de otro tipo para ver qué tendencia siguen. 
+
+Este informe se hizo durante el [hackatón internacional del Open Data Day 2016 en Granada](http://osl.ugr.es/2016/02/26/hackaton-internacional-del-dia-de-los-datos-abiertos-2016/) y tanto los datos como este mismo informe están liberados en [esta dirección de GitHub: http://github.com/inchocordero/granadaton](http://github.com/inchocordero/granadaton). Tiene una licencia libre y las colaboraciones son bienvenidas. 
 # References
+  
   
