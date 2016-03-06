@@ -14,12 +14,12 @@ resultados <- read.csv("../csv/resultados_elecciones_todas.csv")
 resultados.x.eleccion <- data.frame(eleccion = paste(paste(resultados$Año,resultados$Mes,sep="/"),resultados$Tipo,sep="-"),Partido=resultados$Partido,Tipo=resultados$Tipo,Votos=as.numeric(as.character(resultados$Votos)))
 
 #Calcula índice gini
-gini <- ddply(.data=resultados,.(Año,Mes,Tipo), summarise, RESULT=Gini(Votos))
+gini <- ddply(.data=resultados,.(Año,Mes,Tipo), summarise, RESULT=Gini(Votos),PARTIDOS=length(Tipo))
 gini <- gini[1:(nrow(gini)-1),]
-gini.x.eleccion <- data.frame(Fecha=paste(gini$Año,gini$Mes,sep="/"),Tipo=gini$Tipo,gini=gini$RESULT)
+gini.x.eleccion <- data.frame(Fecha=paste(gini$Año,gini$Mes,sep="/"),Tipo=gini$Tipo,gini=gini$RESULT,partidos=gini$PARTIDOS)
 
 #Calcula entropía
-entropy <- ddply(.data=resultados,.(Año,Mes,Tipo), summarise, RESULT=entropy(Votos))
+entropy <- ddply(.data=resultados,.(Año,Mes,Tipo), summarise, RESULT=entropy(Votos),PARTIDOS=length(Tipo))
 entropy <- entropy[1:(nrow(entropy)-1),]
 entropy.x.eleccion <- data.frame(Fecha=paste(entropy$Año,entropy$Mes,sep="/"),Tipo=entropy$Tipo,entropy=entropy$RESULT)
 ```
@@ -27,13 +27,15 @@ entropy.x.eleccion <- data.frame(Fecha=paste(entropy$Año,entropy$Mes,sep="/"),T
 #Introducción
   
 En un sistema multipartidista, los resultados de las elecciones varían de una a otra, creándose mayorías y disolviéndose; los partidos se consolidan, se alían, y finalmente desaparecen. En este trabajo nos planteamos analizar los rsultados de las elecciones españolas desde el principio, usando los datos publicados en la página [Infoelectoral](http://infoelectoral.mir.es) y publicados en @Merelo2016. La página contienen los resultados globales y por circunscripciones de cada proceso electoral en España a nivel nacional: elecciones naconales, municipales, y europeas.
+
+El electorado cambia de elección a elección, y la concentración o dispersión de votos entre los diferentes partidos, así como el número de partidos, puede 
   
 ```{r, echo=FALSE, message=FALSE,results='hide',warning=FALSE}
 ggplot(resultados.x.eleccion,aes(x=eleccion,y=Votos,color=Tipo))+geom_point(stat='identity')+stat_summary(fun.y = "median", geom="point", colour = "red", size = 4, shape=15)+scale_y_log10()+ theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
 ```{r, echo=FALSE, message=FALSE,results='hide',warning=FALSE}
-ggplot(gini.x.eleccion,aes(x=Fecha,y=gini,color=Tipo))+geom_point(stat='identity')+theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(gini.x.eleccion,aes(x=Fecha,y=gini,color=Tipo,size=partidos/10))+geom_point(stat='identity')+theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
 ```{r, echo=FALSE, message=FALSE,results='hide',warning=FALSE}
