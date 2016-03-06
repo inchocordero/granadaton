@@ -9,12 +9,19 @@ bibliography: elecciones.bib
 ```{r, echo=FALSE, message=FALSE,results='hide',warning=FALSE}
 library("ggplot2")
 library("ineq")
+library("plyr")
 resultados <- read.csv("../csv/resultados_elecciones_todas.csv")
-resultados.x.eleccion <- data.frame(eleccion = paste0(resultados$Año,resultados$Mes,resultados$Tipo),Partido=resultados$Partido,Tipo=resultados$Tipo,Votos=as.numeric(as.character(resultados$Votos)))
-gini <- aggregate(resultados.x.eleccion$Votos,list(resultados.x.eleccion$eleccion),Gini)
-gini.x.eleccion <- data.frame(eleccion=gini$Group.1,gini=gini$x)
-entropy <- aggregate(resultados.x.eleccion$Votos,list(resultados.x.eleccion$eleccion),entropy)
-entropy.x.eleccion <- data.frame(eleccion=entropy$Group.1,entropy=entropy$x)
+resultados.x.eleccion <- data.frame(eleccion = paste(paste(resultados$Año,resultados$Mes,sep="/"),resultados$Tipo,sep="-"),Partido=resultados$Partido,Tipo=resultados$Tipo,Votos=as.numeric(as.character(resultados$Votos)))
+
+#Calcula índice gini
+gini <- ddply(.data=resultados,.(Año,Mes,Tipo), summarise, RESULT=Gini(Votos))
+gini <- gini[1:(nrow(gini)-1),]
+gini.x.eleccion <- data.frame(Fecha=paste(gini$Año,gini$Mes,sep="/"),Tipo=gini$Tipo,gini=gini$RESULT)
+
+#Calcula entropía
+entropy <- ddply(.data=resultados,.(Año,Mes,Tipo), summarise, RESULT=entropy(Votos))
+entropy <- entropy[1:(nrow(entropy)-1),]
+entropy.x.eleccion <- data.frame(Fecha=paste(entropy$Año,entropy$Mes,sep="/"),Tipo=entropy$Tipo,entropy=entropy$RESULT)
 ```
 
 #Introducción
@@ -25,5 +32,12 @@ En un sistema multipartidista, los resultados de las elecciones varían de una a
 ggplot(resultados.x.eleccion,aes(x=eleccion,y=Votos,color=Tipo))+geom_point(stat='identity')+stat_summary(fun.y = "median", geom="point", colour = "red", size = 4, shape=15)+scale_y_log10()+ theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
+```{r, echo=FALSE, message=FALSE,results='hide',warning=FALSE}
+ggplot(gini.x.eleccion,aes(x=Fecha,y=gini,color=Tipo))+geom_point(stat='identity')+theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+```{r, echo=FALSE, message=FALSE,results='hide',warning=FALSE}
+ggplot(entropy.x.eleccion,aes(x=Fecha,y=entropy,color=Tipo))+geom_point(stat='identity')+theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
 # References
   
