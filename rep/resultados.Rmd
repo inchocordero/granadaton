@@ -1,0 +1,25 @@
+---
+title: "Desigualdad y sorpresa en las elecciones españolas"
+author: "JJ Merelo"
+date: "06/03/2016"
+output: html_document
+bibliography: elecciones.bib
+---
+
+```{r, echo=FALSE, message=FALSE,results='hide',warning=FALSE}
+library("ggplot2")
+library("ineq")
+resultados <- read.csv("../csv/resultados_elecciones_todas.csv")
+resultados.x.eleccion <- data.frame(eleccion = paste0(resultados$Año,resultados$Mes),Partido=resultados$Partido,Votos=as.numeric(as.character(resultados$Votos)))
+```
+
+#Introducción
+  
+En un sistema multipartidista, los resultados de las elecciones varían de una a otra, creándose mayorías y disolviéndose; los partidos se consolidan, se alían, y finalmente desaparecen. En este trabajo nos planteamos analizar los rsultados de las elecciones españolas desde el principio, usando los datos publicados en la página [Infoelectoral](http://infoelectoral.mir.es) y publicados en @Merelo2016. La página contienen los resultados globales y por circunscripciones de cada proceso electoral en España a nivel nacional: elecciones naconales, municipales, y europeas.
+  
+```{r, echo=FALSE, message=FALSE,results='hide',warning=FALSE}
+ggplot(resultados.x.eleccion,aes(x=eleccion,y=Votos))+geom_point(stat='identity')+stat_summary(fun.y = "median", geom="point", colour = "red", size = 4, shape=15)+scale_y_log10()+ theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+# References
+  
