@@ -7,3 +7,4 @@ resultados.x.eleccion <- data.frame(eleccion = paste(paste(resultados$Año,resul
 votos <- ddply(.data=resultados.x.eleccion,.(eleccion,Tipo), summarise, RESULT=sum(Votos),PARTIDOS=length(Tipo))
 votos.x.eleccion <- data.frame(Fecha=votos$eleccion,Tipo=votos$Tipo,votos=votos$RESULT,partidos=votos$PARTIDOS)
 ggplot(votos.x.eleccion, aes(x=Fecha,y=votos,color=Tipo,size=partidos))+geom_point()+ theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(votos.x.eleccion, aes(x=Fecha,y=votos,width=partidos/100,fill=Tipo))+geom_bar(stat='identity',position='identity')+ theme(axis.text.x = element_text(angle = 90, hjust = 1))
